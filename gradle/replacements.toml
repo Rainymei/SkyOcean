@@ -69,3 +69,11 @@ regex = "import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput(?!;)"
 to = "import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput as FabricPackOutput"
 reverseRegex = "import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput as FabricPackOutput"
 reverse = "import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput"
+
+[stack_template]
+type = "regex"
+condition = "< 26.1"
+regex = "import net.minecraft.world.item.ItemStackTemplate(?!;)"
+to = "import net.minecraft.world.item.ItemStack as ItemStackTemplate"
+reverseRegex = "import net.minecraft.world.item.ItemStack ItemStackTemplate"
+reverse = "import net.minecraft.world.item.ItemStackTemplate"
