@@ -4,13 +4,12 @@ import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.codecs.CodecHelpers
-import me.owdding.skyocean.utils.extensions.asTemplate
-import me.owdding.skyocean.utils.extensions.instantiate
+import me.owdding.skyocean.utils.extensions.asBlueprint
+import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import me.owdding.skyocean.utils.levelBound
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.ItemStackTemplate
 import java.util.concurrent.CopyOnWriteArrayList
 
 object IslandChestStorage {
@@ -54,17 +53,16 @@ object IslandChestStorage {
 
 @GenerateCodec
 data class ChestItem(
-    @FieldName("item_stack") val itemStackTemplate: ItemStackTemplate,
+    @FieldName("item_stack") val itemStackBlueprint: ItemStackBlueprint,
     val slot: Int = 0,
     val pos: BlockPos,
     val pos2: BlockPos?,
 ) {
-    //? >= 26.1
-    constructor(template: ItemStack, slot: Int = 0, pos: BlockPos, pos2: BlockPos?) : this(template.asTemplate(), slot, pos, pos2)
+    constructor(template: ItemStack, slot: Int = 0, pos: BlockPos, pos2: BlockPos?) : this(template.asBlueprint(), slot, pos, pos2)
 
     operator fun component5() = itemStack
 
-    val itemStack: ItemStack by levelBound { itemStackTemplate.instantiate() }
+    val itemStack: ItemStack by levelBound { itemStackBlueprint.create() }
     val posList: List<BlockPos> get() = listOfNotNull(pos, pos2)
 }
 

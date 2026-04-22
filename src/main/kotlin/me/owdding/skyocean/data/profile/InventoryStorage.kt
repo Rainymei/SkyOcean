@@ -7,6 +7,7 @@ import me.owdding.skyocean.features.inventory.InventoryType
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.codecs.CodecHelpers
+import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
@@ -26,7 +27,7 @@ object InventoryStorage {
             when (it) {
                 0 -> CodecUtils.map(
                     SkyOceanCodecs.getCodec<InventoryType>(),
-                    CodecUtils.mutableList(CodecHelpers.ITEM_STACK_TEMPLATE_CODEC),
+                    CodecUtils.mutableList(ItemStackBlueprint.CODEC),
                 ).xmap(
                     { it.mapValues { (_, value) -> DimensionInventory(value) }.toMutableMap() },
                     { it.mapValues { (_, value) -> value.inventoryTemplate }.toMutableMap() },

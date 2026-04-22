@@ -12,6 +12,7 @@ import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.PackMetadata
 import me.owdding.skyocean.utils.extensions.contains
+import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import net.minecraft.core.BlockPos
 import net.minecraft.core.ClientAsset
 import net.minecraft.network.chat.Component
@@ -29,7 +30,6 @@ import net.minecraft.network.chat.contents.TranslatableContents
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.ItemStackTemplate
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
@@ -58,17 +58,6 @@ object CodecHelpers {
 
     @IncludedCodec
     val ITEM_STACK_CODEC: Codec<ItemStack> = ItemStack.OPTIONAL_CODEC
-
-    //? >= 26.1 {
-    private val EMPTY_STACK = ItemStackTemplate(Items.AIR)
-
-    @IncludedCodec
-    val ITEM_STACK_TEMPLATE_CODEC: Codec<ItemStackTemplate> = ExtraCodecs.optionalEmptyMap(ItemStackTemplate.CODEC).xmap(
-        { itemStack -> itemStack.orElse(EMPTY_STACK) },
-        { itemStack -> if (itemStack in Items.AIR) Optional.empty() else Optional.of(itemStack) },
-    )
-    //? } else
-    //val ITEM_STACK_TEMPLATE_CODEC = ITEM_STACK_CODEC
 
     @IncludedCodec
     val BLOCK_POS_CODEC: Codec<BlockPos> = BlockPos.CODEC

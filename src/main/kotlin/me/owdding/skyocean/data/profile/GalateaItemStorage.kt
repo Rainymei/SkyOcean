@@ -5,13 +5,12 @@ import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils.containerItems
-import me.owdding.skyocean.utils.extensions.asTemplate
-import me.owdding.skyocean.utils.extensions.instantiate
+import me.owdding.skyocean.utils.extensions.asBlueprint
+import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import me.owdding.skyocean.utils.levelBound
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import me.owdding.skyocean.utils.withSetter
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.ItemStackTemplate
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
@@ -50,17 +49,17 @@ object GalateaItemStorage {
 
 @GenerateCodec
 data class GalateaItems(
-    @FieldName("huntaxeItem") var huntaxeItemTemplate: ItemStackTemplate?,
-    @FieldName("toolkitItems") var toolkitItemsTemplate: List<ItemStackTemplate>,
+    @FieldName("huntaxeItem") var huntaxeItemTemplate: ItemStackBlueprint?,
+    @FieldName("toolkitItems") var toolkitItemsTemplate: List<ItemStackBlueprint>,
 ) {
     //? >= 26.1
-    constructor(huntaxeItem: ItemStack, toolkitItems: List<ItemStack>) : this(huntaxeItem.asTemplate(), toolkitItems.map { it.asTemplate() })
+    constructor(huntaxeItem: ItemStack, toolkitItems: List<ItemStack>) : this(huntaxeItem.asBlueprint(), toolkitItems.map { it.asBlueprint() })
 
-    var huntaxeItem by levelBound { huntaxeItemTemplate?.instantiate() }.withSetter {
-        huntaxeItemTemplate = it?.asTemplate()
+    var huntaxeItem by levelBound { huntaxeItemTemplate?.create() }.withSetter {
+        huntaxeItemTemplate = it?.asBlueprint()
     }
-    var toolkitItems by levelBound { toolkitItemsTemplate.map { it.instantiate() } }.withSetter {
-        toolkitItemsTemplate = it.map { it.asTemplate() }
+    var toolkitItems by levelBound { toolkitItemsTemplate.map { it.create() } }.withSetter {
+        toolkitItemsTemplate = it.map { it.asBlueprint() }
     }
 
     companion object {
