@@ -1533,6 +1533,15 @@
         "reset": "Reset"
       }
     },
+    "screens": {
+      "item_search": {
+        "sort": {
+          "amount": "Amount",
+          "price": "Price",
+          "rarity": "Rarity"
+        }
+      }
+    },
     "keybind": {
       "item_search": "Open Item Search",
       "item_value": "Open Item Value",
