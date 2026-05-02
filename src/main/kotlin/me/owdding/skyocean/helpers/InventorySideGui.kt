@@ -12,6 +12,7 @@ import org.intellij.lang.annotations.Language
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenMouseClickEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.utils.extentions.left
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
@@ -28,9 +29,16 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String, val alig
     private var lastEvent: ContainerInitializedEvent? = null
     private var isBeingShown: Boolean = false
 
+    private data class ClickRegion(val x: Int, val y: Int, val width: Int, val height: Int, val onClick: () -> Unit)
+    private val clickRegions = mutableListOf<ClickRegion>()
+
     abstract val enabled: Boolean
 
     protected abstract fun ContainerInitializedEvent.getLayout(): Layout?
+
+    protected fun registerClickRegion(x: Int, y: Int, width: Int, height: Int, onClick: () -> Unit) {
+        clickRegions.add(ClickRegion(x, y, width, height, onClick))
+    }
 
     fun refresh() {
         val event = lastEvent ?: return
@@ -38,6 +46,7 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String, val alig
 
         isBeingShown = enabled && regex.matches(screen.title.stripped)
         if (!isBeingShown) return
+        clickRegions.clear()
 
         val layout = event.getLayout() ?: return
 
@@ -68,6 +77,19 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String, val alig
         val widget = this.oldWidget ?: return
 
         event.screen.addWidget(widget)
+    }
+
+    @Subscription(inherited = true)
+    fun onMouseClicked(event: ScreenMouseClickEvent) {
+        if (!isBeingShown) return
+        val widget = oldWidget ?: return
+        val relX = event.x - widget.x
+        val relY = event.y - widget.y
+        clickRegions.forEach { (x, y, width, height, onClick) ->
+            if (relX >= x && relX <= x + width && relY >= y && relY <= y + height) {
+                onClick()
+            }
+        }
     }
 
     private fun Screen.addWidget(widget: AbstractWidget) {
