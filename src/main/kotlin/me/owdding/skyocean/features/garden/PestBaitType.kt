@@ -32,17 +32,18 @@ object PestBaitType : InventorySideGui("(?:Pest|Mouse|Vermin) Trap", { GardenCon
         Spray.entries.forEach { spray ->
             val pests = Pest.getPests(spray)
 
-            horizontal(alignment = MIDDLE) {
+            val row = LayoutFactory.horizontal(alignment = MIDDLE) {
                 display(Displays.item(spray.itemStack))
                 textDisplay(": ${pests.joinToString(", ") { it.displayName }}") {
                     color = TextColor.DARK_GRAY
                 }
             }
+            widget(row)
         }
-    }.also { layout ->
+    }.apply {
         val sprayRows = mutableListOf<LayoutElement>()
         var skippedHeader = false
-        layout.visitChildren {
+        visitChildren {
             if (!skippedHeader) { skippedHeader = true; return@visitChildren }
             sprayRows.add(it)
         }
