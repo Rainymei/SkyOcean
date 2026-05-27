@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.inventory
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.features.inventory.buttons.ButtonConfigScreen
+import me.owdding.skyocean.config.features.inventory.StorageOverlayConfig
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
@@ -10,6 +11,7 @@ object InventoryConfig : CategoryKt("inventory") {
 
     init {
         obj("sackValue", SackValueConfig) { this.translation = "skyocean.config.inventory.sack_value" }
+        obj("storageOverlay", StorageOverlayConfig) { this.translation = "skyocean.config.inventory.storage_overlay" }
     }
 
     init {
