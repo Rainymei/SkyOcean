@@ -14,6 +14,10 @@ object InventoryConfig : CategoryKt("inventory") {
         obj("storageOverlay", StorageOverlayConfig) { this.translation = "skyocean.config.inventory.storage_overlay" }
     }
 
+    var minionHelper by boolean(true) {
+        translation = "skyocean.config.inventory.minion_helper"
+    }
+
     init {
         separator { title = "skyocean.config.inventory.inventory_buttons" }
     }
